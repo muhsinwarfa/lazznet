@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('massemailer/', include('massemailer.urls')),
+    path('', include('massemailer.urls')),
     path('admin/', admin.site.urls),
 ]
 
