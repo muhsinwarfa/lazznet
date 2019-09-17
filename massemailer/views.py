@@ -1,18 +1,18 @@
 from django.shortcuts import render, redirect
-from django.core.mail import send_mail,send_mass_mail
+from django.core.mail import send_mail,send_mass_mail, EmailMessage
+from django.core import mail
+
 from django.http import HttpResponse
 from .forms import MailForm
 from .models import Mail
 from django.conf import settings
-
+#
 def index(request):
     a = "hello muthafcukaa"
-    context= {
+    context = {
         'a': a
     }
     return render(request,'index.html',context)
-
-
 
 
 def massemail(request):
@@ -22,12 +22,21 @@ def massemail(request):
             # get value of input by user
             receiver = request.POST['receiver']
             listofemails = receiver.split(",")
-            finaltuple = ()
+            listofmessages = []
+            connection = mail.get_connection()
+
+            # Manually open the connection
+            connection.open()
             for email in listofemails:
-                finaltuple = finaltuple + (('This general subject', 'This is message',settings.EMAIL_HOST_USER,[email]),)
-            send_mass_mail(finaltuple, fail_silently=False)
+                msg = EmailMessage('Subject of the Email', 'Body of the email', settings.EMAIL_HOST_USER, [email])
+                msg.content_subtype = "html"
+                msg.attach_file('attachments/giggity.png')
+                listofmessages.append(msg)
+
+            connection.send_messages(listofmessages)
+            connection.close()
+
             form.save()
         return redirect('index')
     form = MailForm()
     return render(request,"emailform.html", {'form': form})
-
