@@ -5,6 +5,8 @@ from django.core import mail
 from django.http import HttpResponse
 from .forms import MailForm
 from .models import Mail
+
+
 from django.conf import settings
 #
 def index(request):
@@ -21,6 +23,8 @@ def massemail(request):
         if form.is_valid():
             # get value of input by user
             receiver = request.POST['receiver']
+            subject = request.POST['subject']
+            body = request.POST['body']
             listofemails = receiver.split(",")
             listofmessages = []
             connection = mail.get_connection()
@@ -28,9 +32,9 @@ def massemail(request):
             # Manually open the connection
             connection.open()
             for email in listofemails:
-                msg = EmailMessage('Subject of the Email', 'Body of the email', settings.EMAIL_HOST_USER, [email])
+                msg = EmailMessage(subject, body, settings.EMAIL_HOST_USER, [email])
                 msg.content_subtype = "html"
-                msg.attach_file('attachments/giggity.png')
+                msg.attach_file('attachments/myresume.pdf')
                 listofmessages.append(msg)
 
             connection.send_messages(listofmessages)
@@ -40,3 +44,4 @@ def massemail(request):
         return redirect('index')
     form = MailForm()
     return render(request,"emailform.html", {'form': form})
+
