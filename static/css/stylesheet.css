@@ -1,8 +1,6 @@
 .form-sizer{
-    background-color: black;
-    height: 400px;
-}
-
-body{
-    background-color: black;
+    background-color: #e7e6ff;
+    padding: 20px;
+    border: 1px solid lightgrey;
+    margin-top: 20px;
 }
