@@ -48,6 +48,10 @@ INSTALLED_APPS = [
      'massemailer.apps.LaznetConfig',
      'bootstrap4',
      'crispy_forms',
+     'extract_emails',
+    're',
+    'requests',
+    'bs4',
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

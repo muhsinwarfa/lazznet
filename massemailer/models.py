@@ -7,4 +7,8 @@ class Mail(models.Model):
     body =  models.TextField(default = "Hello",null=False, blank=False)
 
 
+class Scrapper(models.Model):
+    csvdump = models.TextField(default = "dump csv here",null=False, blank=False)
+
+
 

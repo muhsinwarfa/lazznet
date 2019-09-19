@@ -1,18 +1,32 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail,send_mass_mail, EmailMessage
-from django.core import mail
+from urllib.request import Request, urlopen
 
+from django.core import mail
 from django.http import HttpResponse
 from .forms import MailForm
 from .models import Mail
-
-
 from django.conf import settings
-#
+import re
+import requests
+from bs4 import BeautifulSoup as soup
+
+
 def index(request):
     a = "hello muthafcukaa"
+    url = 'https://muhsin-warfa-portfolio.webflow.io'
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(req).read()
+    page_soup = soup(webpage, "html.parser")
+    email = page_soup(text=re.compile(r'[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*'))
+    _emailtokens = str(email).replace("\\t", "").replace("\\n", "").split(' ')
+    if len(_emailtokens):
+        print([match.group(0) for token in _emailtokens for match in
+               [re.search(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", str(token.strip()))] if match])
+
+
     context = {
-        'a': a
+        'a': a,
     }
     return render(request,'index.html',context)
 
@@ -44,4 +58,5 @@ def massemail(request):
         return redirect('index')
     form = MailForm()
     return render(request,"emailform.html", {'form': form})
+
 
