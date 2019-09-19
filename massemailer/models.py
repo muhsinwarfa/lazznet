@@ -8,7 +8,7 @@ class Mail(models.Model):
 
 
 class Scrapper(models.Model):
-    csvdump = models.TextField(default = "dump csv here",null=False, blank=False)
+    csvdump = models.TextField(default = "insert website",null=False, blank=False)
 
 
 

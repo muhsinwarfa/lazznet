@@ -4,8 +4,8 @@ from urllib.request import Request, urlopen
 
 from django.core import mail
 from django.http import HttpResponse
-from .forms import MailForm
-from .models import Mail
+from .forms import MailForm,ScrapperForm
+from .models import Mail,Scrapper
 from django.conf import settings
 import re
 import requests
@@ -14,22 +14,28 @@ from bs4 import BeautifulSoup as soup
 
 def index(request):
     a = "hello muthafcukaa"
-    url = 'https://muhsin-warfa-portfolio.webflow.io'
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req).read()
-    page_soup = soup(webpage, "html.parser")
-    email = page_soup(text=re.compile(r'[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*'))
-    _emailtokens = str(email).replace("\\t", "").replace("\\n", "").split(' ')
-    if len(_emailtokens):
-        print([match.group(0) for token in _emailtokens for match in
-               [re.search(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", str(token.strip()))] if match])
+    if request.method == 'POST':
+        form = ScrapperForm(request.POST)
+        if form.is_valid():
+            url =  request.POST['csvdump']
+            form.save()
+            req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            webpage = urlopen(req).read()
+            page_soup = soup(webpage, "html.parser")
+            email = page_soup(text=re.compile(r'[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*'))
+            _emailtokens = str(email).replace("\\t", "").replace("\\n", "").split(' ')
+            if len(_emailtokens):
+                email = ([match.group(0) for token in _emailtokens for match in
+                       [re.search(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", str(token.strip()))] if match])
+                print(email)
+            return render(request,'listofemails.html',{'email' : email})
 
-
+    form = ScrapperForm()
     context = {
         'a': a,
+        'form': form
     }
     return render(request,'index.html',context)
-
 
 def massemail(request):
     if request.method == 'POST':
