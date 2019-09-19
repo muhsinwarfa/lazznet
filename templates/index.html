@@ -1,20 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% load static %}
+    {% load crispy_forms_tags %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
     <title>Index page</title>
 
 </head>
 <body>
 
- <form method="post" action="{% url 'index' %} " >
-         {% csrf_token %}
-         {{ form}}
-         <button type="submit" class="btn btn-primary">get email</button>
- </form>
+
+ <div class="container">
+        <div class="row" >
+            <div class="col-3"></div>
+                <div class="col-6  form-sizer ">
+                  <form method="post" action="{% url 'index' %} " >
+
+                        {% csrf_token %}
+                            {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary">Get Email</button>
+                 </form>
+                 </div>
+            <div class="col-3"></div>
+        </div>
+ </div>
 
 
 </body>

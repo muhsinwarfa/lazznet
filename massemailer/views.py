@@ -13,31 +13,31 @@ from bs4 import BeautifulSoup as soup
 
 
 def index(request):
-    a = "hello muthafcukaa"
     if request.method == 'POST':
+        post = request.POST.copy()
+        url = request.POST['csvdump']
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        webpage = urlopen(req).read()
+        page_soup = soup(webpage, "html.parser")
+        email = page_soup(text=re.compile(r'[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*'))
+        _emailtokens = str(email).replace("\\t", "").replace("\\n", "").split(' ')
+        if len(_emailtokens):
+            emails = ([match.group(0) for token in _emailtokens for match in
+                       [re.search(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", str(token.strip()))] if match])
+        post.update({'csvdump' : " ".join(str(x) for x in emails)})
+        request.POST = post
         form = ScrapperForm(request.POST)
         if form.is_valid():
-            url =  request.POST['csvdump']
             form.save()
-            req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-            webpage = urlopen(req).read()
-            page_soup = soup(webpage, "html.parser")
-            email = page_soup(text=re.compile(r'[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*'))
-            _emailtokens = str(email).replace("\\t", "").replace("\\n", "").split(' ')
-            if len(_emailtokens):
-                email = ([match.group(0) for token in _emailtokens for match in
-                       [re.search(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", str(token.strip()))] if match])
-                print(email)
-            return render(request,'listofemails.html',{'email' : email})
+            return render(request,'listofemails.html',{'emails' : emails})
 
     form = ScrapperForm()
     context = {
-        'a': a,
         'form': form
     }
     return render(request,'index.html',context)
 
-def massemail(request):
+def massemail(request,id):
     if request.method == 'POST':
         form = MailForm(request.POST)
         if form.is_valid():
@@ -64,5 +64,4 @@ def massemail(request):
         return redirect('index')
     form = MailForm()
     return render(request,"emailform.html", {'form': form})
-
 
