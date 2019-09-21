@@ -13,8 +13,6 @@ from bs4 import BeautifulSoup as soup
 
 
 def index(request):
-
-
     if request.method == 'POST':
         post = request.POST.copy()
         url = request.POST['csvdump']
@@ -33,7 +31,6 @@ def index(request):
             x = form.save()
             objectid = x.id
             return render(request,'listofemails.html',{'emails' : emails , 'objectid' : objectid})
-
     form = ScrapperForm()
     context = {
         'form': form
@@ -42,7 +39,7 @@ def index(request):
 
 def massemail(request , id):
     normalid = id
-    mailobj = Scrapper.objects.get(id = 69)
+    mailobj = Scrapper.objects.get(id = normalid)
     print(mailobj.csvdump)
     if request.method == 'POST':
         form = MailForm(request.POST)
@@ -54,7 +51,6 @@ def massemail(request , id):
             listofemails = form.receiver.split(",")
             listofmessages = []
             connection = mail.get_connection()
-
             # Manually open the connection
             connection.open()
             for email in listofemails:
@@ -62,7 +58,6 @@ def massemail(request , id):
                 msg.content_subtype = "html"
                 msg.attach_file('attachments/myresume.pdf')
                 listofmessages.append(msg)
-
             connection.send_messages(listofmessages)
             connection.close()
 

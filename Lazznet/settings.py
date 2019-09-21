@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     're',
     'requests',
     'bs4',
+    'fontawesome',
 
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
