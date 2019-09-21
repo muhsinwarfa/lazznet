@@ -13,6 +13,27 @@
 <body>
 
 
+{#<div class="container">#}
+{#        <div class="row" >#}
+{#            <div class="col-3"></div>#}
+{#                <div class="col-6 ">#}
+{#                   <ul class="list-group">#}
+{#                   {% if emails is not None %}#}
+{#                        {% for email in emails %}#}
+{#                            <li class="list-group-item">{{ email }}</li>#}
+{#                        {% empty %}#}
+{#                            <li class="list-group-item">Sorry! Couldn't find any email in this page!</li>#}
+{#                        {% endfor %}#}
+{#                    {% endif %}#}
+{#                    </ul>#}
+{#                    <button href="{% url 'sendmail' id %}" type="button" class="btn btn-outline-primary">Email this list</button>#}
+{##}
+{#                 </div>#}
+{#            <div class="col-3"></div>#}
+{#        </div>#}
+{# </div>#}
+
+
 <div class="container">
         <div class="row" >
             <div class="col-3"></div>
@@ -26,8 +47,9 @@
                         {% endfor %}
                     {% endif %}
                     </ul>
-
                  </div>
+                    <a href= "{% url 'sendmail' objectid %}" type="button" class="btn btn-outline-primary">Primary</a>
+
             <div class="col-3"></div>
         </div>
  </div>

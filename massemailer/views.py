@@ -13,6 +13,8 @@ from bs4 import BeautifulSoup as soup
 
 
 def index(request):
+
+
     if request.method == 'POST':
         post = request.POST.copy()
         url = request.POST['csvdump']
@@ -28,8 +30,9 @@ def index(request):
         request.POST = post
         form = ScrapperForm(request.POST)
         if form.is_valid():
-            form.save()
-            return render(request,'listofemails.html',{'emails' : emails})
+            x = form.save()
+            objectid = x.id
+            return render(request,'listofemails.html',{'emails' : emails , 'objectid' : objectid})
 
     form = ScrapperForm()
     context = {
@@ -37,15 +40,18 @@ def index(request):
     }
     return render(request,'index.html',context)
 
-def massemail(request,id):
+def massemail(request , id):
+    normalid = id
+    mailobj = Scrapper.objects.get(id = 69)
+    print(mailobj.csvdump)
     if request.method == 'POST':
         form = MailForm(request.POST)
         if form.is_valid():
             # get value of input by user
-            receiver = request.POST['receiver']
+            form.receiver = mailobj.csvdump
             subject = request.POST['subject']
             body = request.POST['body']
-            listofemails = receiver.split(",")
+            listofemails = form.receiver.split(",")
             listofmessages = []
             connection = mail.get_connection()
 
@@ -63,5 +69,5 @@ def massemail(request,id):
             form.save()
         return redirect('index')
     form = MailForm()
-    return render(request,"emailform.html", {'form': form})
+    return render(request,"emailform.html", {'form': form, 'normalid' : normalid})
 
