@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail,send_mass_mail, EmailMessage
-from urllib.request import Request, urlopen
-
+from urllib.request import Request, urlopen, HTTPError,HTTPSHandler
+import urllib
+import sys
 from django.core import mail
 from django.http import HttpResponse
 from .forms import MailForm,ScrapperForm
@@ -16,7 +17,12 @@ def index(request):
     if request.method == 'POST':
         post = request.POST.copy()
         url = request.POST['csvdump']
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        try:
+            req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            urllib.request.urlopen(req)
+        except urllib.error.URLError as e:
+              return HttpResponse("<a>Hello</a>")
+
         webpage = urlopen(req).read()
         page_soup = soup(webpage, "html.parser")
         email = page_soup(text=re.compile(r'[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*'))
