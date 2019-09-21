@@ -18,3 +18,8 @@
 .emailtopdiv{
     height: 60px;
 }
+.page-wrap {
+    margin-top: 50px;
+    height: 100px;
+    width: 100px;
+}

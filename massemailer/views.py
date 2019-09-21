@@ -21,7 +21,7 @@ def index(request):
             req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             urllib.request.urlopen(req)
         except urllib.error.URLError as e:
-              return HttpResponse("<a>Hello</a>")
+              return render(request,"404.html")
 
         webpage = urlopen(req).read()
         page_soup = soup(webpage, "html.parser")
