@@ -51,9 +51,6 @@ def index(request):
     return render(request,'index.html',context)
 
 
-
-
-
 def massemail(request , id):
     normalid = id
     mailobj = Scrapper.objects.get(id = normalid)
@@ -65,15 +62,12 @@ def massemail(request , id):
             subject = request.POST['subject']
             body = request.POST['body']
             replymail = request.POST['replymail']
-
-
             try:
                 pdf = request.FILES['pdf']
                 fs = FileSystemStorage()
                 name = fs.save(pdf.name, pdf)
             except MultiValueDictKeyError:
                 pdf = None
-
             listofemails = form.receiver.split(",")
             listofmessages = []
             connection = mail.get_connection()
@@ -84,12 +78,13 @@ def massemail(request , id):
                 msg = EmailMessage(subject, body, settings.EMAIL_HOST_USER, [email], headers=headers)
                 msg.content_subtype = "html"
                 if pdf is not None:
-                    msg.attach_file(pdf.name)
+                    media = 'media/' + pdf.name
+                    msg.attach_file(media)
                 listofmessages.append(msg)
             connection.send_messages(listofmessages)
             connection.close()
             form.save()
-        return redirect('index')
+        return render(request,'thankyou.html')
     form = MailForm()
     return render(request,"emailform.html", {'form': form, 'normalid' : normalid})
 

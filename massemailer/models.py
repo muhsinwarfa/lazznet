@@ -4,7 +4,7 @@ from django.core.validators  import RegexValidator
 class Mail(models.Model):
     receiver = models.CharField(max_length=100)
     replymail = models.CharField(max_length=100,null=True, blank=True)
-    pdf = models.FileField(upload_to='attachments/',null=True, blank=True)
+    pdf = models.FileField(upload_to='media/',null=True, blank=True)
     subject =  models.CharField(max_length=100)
     body =  models.TextField(default = "Hello",null=False, blank=False)
 
