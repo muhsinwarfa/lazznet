@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail,send_mass_mail, EmailMessage
 from urllib.request import Request, urlopen, HTTPError,HTTPSHandler
 import urllib
-import sys
+from django.core.files.storage import FileSystemStorage
+
 from django.core import mail
-from django.http import HttpResponse
 from .forms import MailForm,ScrapperForm
 from .models import Mail,Scrapper
 from django.conf import settings
