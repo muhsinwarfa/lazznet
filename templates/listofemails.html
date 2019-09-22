@@ -7,7 +7,13 @@
     {% load crispy_forms_tags %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/stylesheet.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    <link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="media/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="media/favicon-16x16.png">
+    <link rel="manifest" href="media/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <title>List of Emails</title>
 </head>
 <body>
@@ -20,18 +26,21 @@
                    {% if emails is not None %}
                         {% for email in emails %}
                             <li class="list-group-item align-items-center">{{ email }}</li>
-                        {% empty %}
-                            <li class="list-group-item">Sorry! Couldn't find any email in this page!</li>
                         {% endfor %}
+                               <div class = "centerdiv">
+                                    <a class="btn btn-outline-info" href= "{% url 'sendmail' objectid %}" role="button">Send Email</a>
+                                </div>
+                    {% else %}
+                        <li class="list-group-item">Sorry! Couldn't find any email in this page!</li>
+                       <br><br>
+                        <a href="{% url 'index' %}" class="btn btn-link">Back to Home</a>
                     {% endif %}
                     </ul>
                  </div>
             <div class="col-2">
             </div>
         </div>
-        <div class = "centerdiv">
-            <a class="btn btn-outline-info" href= "{% url 'sendmail' objectid %}" role="button">Send Email</a>
-        </div>
+
  </div>
 </body>
 </html>

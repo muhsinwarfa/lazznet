@@ -22,9 +22,9 @@ def index(request):
             urllib.request.urlopen(req)
         except urllib.error.URLError as e:
               return render(request,"404.html")
-
         webpage = urlopen(req).read()
         page_soup = soup(webpage, "html.parser")
+
         email = page_soup(text=re.compile(r'[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*'))
         _emailtokens = str(email).replace("\\t", "").replace("\\n", "").split(' ')
         if len(_emailtokens):
@@ -33,15 +33,26 @@ def index(request):
         post.update({'csvdump' : " ".join(str(x) for x in emails)})
         request.POST = post
         form = ScrapperForm(request.POST)
+        if(len(email) == 0):
+            emails = None
+            objectid = None
+            return render(request, 'listofemails.html', {'emails': emails, 'objectid': objectid})
+
         if form.is_valid():
             x = form.save()
             objectid = x.id
             return render(request,'listofemails.html',{'emails' : emails , 'objectid' : objectid})
+
     form = ScrapperForm()
     context = {
         'form': form
     }
+
     return render(request,'index.html',context)
+
+
+
+
 
 def massemail(request , id):
     normalid = id
