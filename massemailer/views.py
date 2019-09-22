@@ -3,7 +3,7 @@ from django.core.mail import send_mail,send_mass_mail, EmailMessage
 from urllib.request import Request, urlopen, HTTPError,HTTPSHandler
 import urllib
 from django.core.files.storage import FileSystemStorage
-
+from django.utils.datastructures import MultiValueDictKeyError
 from django.core import mail
 from .forms import MailForm,ScrapperForm
 from .models import Mail,Scrapper
@@ -53,22 +53,30 @@ def massemail(request , id):
             form.receiver = mailobj.csvdump
             subject = request.POST['subject']
             body = request.POST['body']
-            pdf = request.FILES['pdf']
-            fs = FileSystemStorage()
-            name = fs.save(pdf.name, pdf)
+            replymail = request.POST['replymail']
+
+
+            try:
+                pdf = request.FILES['pdf']
+                fs = FileSystemStorage()
+                name = fs.save(pdf.name, pdf)
+            except MultiValueDictKeyError:
+                pdf = None
+
             listofemails = form.receiver.split(",")
             listofmessages = []
             connection = mail.get_connection()
             # Manually open the connection
             connection.open()
+            headers = {'Reply-To': replymail}
             for email in listofemails:
-                msg = EmailMessage(subject, body, settings.EMAIL_HOST_USER, [email])
+                msg = EmailMessage(subject, body, settings.EMAIL_HOST_USER, [email], headers=headers)
                 msg.content_subtype = "html"
-                msg.attach_file(pdf.name)
+                if pdf is not None:
+                    msg.attach_file(pdf.name)
                 listofmessages.append(msg)
             connection.send_messages(listofmessages)
             connection.close()
-
             form.save()
         return redirect('index')
     form = MailForm()
