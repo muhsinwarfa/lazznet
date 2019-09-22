@@ -46,14 +46,16 @@ def index(request):
 def massemail(request , id):
     normalid = id
     mailobj = Scrapper.objects.get(id = normalid)
-    print(mailobj.csvdump)
     if request.method == 'POST':
-        form = MailForm(request.POST)
+        form = MailForm(request.POST, request.FILES)
         if form.is_valid():
             # get value of input by user
             form.receiver = mailobj.csvdump
             subject = request.POST['subject']
             body = request.POST['body']
+            pdf = request.FILES['pdf']
+            fs = FileSystemStorage()
+            name = fs.save(pdf.name, pdf)
             listofemails = form.receiver.split(",")
             listofmessages = []
             connection = mail.get_connection()
@@ -62,7 +64,7 @@ def massemail(request , id):
             for email in listofemails:
                 msg = EmailMessage(subject, body, settings.EMAIL_HOST_USER, [email])
                 msg.content_subtype = "html"
-                msg.attach_file('attachments/myresume.pdf')
+                msg.attach_file(pdf.name)
                 listofmessages.append(msg)
             connection.send_messages(listofmessages)
             connection.close()

@@ -5,7 +5,7 @@ from .models import Mail, Scrapper
 class MailForm(forms.ModelForm):
     class Meta:
         model = Mail
-        fields =['receiver','subject','body']
+        fields =['receiver', 'pdf' ,'subject','body']
         exclude = ('receiver',)
 
 class ScrapperForm(forms.ModelForm):
