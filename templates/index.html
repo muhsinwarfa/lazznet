@@ -15,19 +15,29 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-    <title>Index page</title>
+    <title>Prospect Finder </title>
 </head>
-<body>
+<body  >
+<nav class="navbar navbar-light bg-light">
+  <a href="{% url 'index' %}" class="navbar logomargin" style="margin-left: 60px;"><img src="/media/companylogo.png"></a>
+</nav>
+<br>
+<br>
+<div class="d-flex justify-content-center"><h3 style="justify-content: center">
+  Reach out to your potential employers
+  <small class="text-muted">in just 3 clicks aways</small>
+</h3>
+</div>
 
- <div class="container">
+
+ <div class="container ">
         <div class="row" >
             <div class="col-3"></div>
                 <div class="col-6  ">
-                  <form id="demoForm" class="text-center border border-light p-5" method="post" action="{% url 'index' %} " >
+                  <form id="demoForm" class="text-center  p-5" method="post" action="{% url 'index' %} " >
                        {% csrf_token %}
-                        <p class="h4 mb-4">Enter Website URL</p>
                         <!-- Email -->
-                        <textarea data-validation="url" name="csvdump" cols="20" rows="10" placeholder="insert website..." class="textarea form-control" required="" id="id_csvdump"></textarea>
+                        <textarea data-validation="url" name="csvdump" cols="20" rows="5" placeholder="insert website..." class="textarea form-control" required="" id="id_csvdump"></textarea>
                       <!-- Sign in button -->
                         <button class="btn btn-info btn-block my-4" type="submit">Extract Email</button>
                   </form>
