@@ -28,12 +28,12 @@ EMAIL_HOST_PASSWORD = os.environ.get('apppassword')
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'tjm0wh3nmj2x6+%7005+w&ei7w3u1ul_6ed)8na1u^mbc$d6u&'
-
+# SECRET_KEY = 'tjm0wh3nmj2x6+%7005+w&ei7w3u1ul_6ed)8na1u^mbc$d6u&'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['myprospectfinder.herokuapp.com']
 
 
 # Application definition
